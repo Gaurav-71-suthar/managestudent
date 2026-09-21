@@ -48,7 +48,7 @@
 
 
       <!-- Enrollment Form -->
-      <form th:action="@{/enrollments/assign}"
+      <form th:action="@{/enrollments/enrollCourse}"
             th:object="${enrollmentsDto}"
             method="post">
 
@@ -76,6 +76,10 @@
 
 
               <div class="card-body">
+
+                <div class="invalid-feedback"
+                     th:if="${#fields.hasErrors('courseIds')}"
+                     th:errors="*{courseIds}"></div>
 
                 <div class="table-responsive">
 
@@ -206,6 +210,7 @@
                     <option
                             th:each="student : ${studentList}"
                             th:value="${student.id}"
+
                             th:data-name="${student.firstName + ' ' + student.lastName}"
                             th:data-email="${student.email}"
                             th:text="${student.firstName + ' ' +
@@ -217,6 +222,12 @@
                     </option>
 
                   </select>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('studentId')}"
+                       th:errors="*{studentId}">
+
+                  </div>
+
 
 
                   <!-- Selected Student -->
@@ -339,11 +350,13 @@
   const selectedCourses=document.getElementById("selectedCourses");
   const selectedStudent=document.getElementById("selectedStudent");
   const selectedEmail=document.getElementById("selectedEmail");
+
   const studentSelect=document.getElementById("studentSelect");
 
   function updateSummary(){
 
   let selected=[];
+
   let total=0;
   checkboxes.forEach(cb =>{
        if(cb.checked){
@@ -375,7 +388,7 @@
 function updateStudent(){
    const studentValues=studentSelect && studentSelect.value ? studentSelect.options[studentSelect.selectedIndex] : null;
    selectedStudent.textContent=studentValues ? studentValues.dataset.name : '';
-   selectedEmail.textContent=studentValues ? studentValues.email : '';
+   selectedEmail.textContent=studentValues ? studentValues.dataset.email : '';
 }
 
 
@@ -383,9 +396,13 @@ document.addEventListener("DOMContentLoaded", () => {
   checkboxes.forEach(cb => cb.addEventListener("change", updateSummary));
 
   if(studentSelect){
-       studentSelect.addEventListener("change", updateSummary)
-});
+       studentSelect.addEventListener("change", updateStudent);
+  }
 
+  updateSummary();
+  updateStudent();
+
+});
 
 </script>
 
