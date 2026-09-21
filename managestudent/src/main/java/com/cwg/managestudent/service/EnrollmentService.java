@@ -5,6 +5,8 @@ import com.cwg.managestudent.dto.EnrollmentSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface EnrollmentService {
 
       void enrollStudentToCourses(EnrollmentDTO enrollmentDTO);
@@ -13,5 +15,5 @@ public interface EnrollmentService {
 
       EnrollmentSummary findEnrolledStudentCourseDetails(Long studentId);
 
-
+      List<EnrollmentSummary> getRecentlyEnrolledStudents();
 }

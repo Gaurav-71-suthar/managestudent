@@ -79,39 +79,31 @@
                         Recent Student Registrations
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
+                        <div class="text-muted" th:if="${students.isEmpty()}">No course found</div>
+
+                        <div class="table-responsive" th:if="${!students.isEmpty()}">
+                            <table class="table table-hover table-striped align-middle">
                                 <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Course</th>
-                                        <th>Enroll Date</th>
-                                        <th>Duration</th>
-                                    </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Student Name</th>
+                                    <th>Email</th>
+                                    <th>Courses Count</th>
+                                    <th>Total Fee</th>
+                                    <th>Actions</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td data-label="ID">#STU001</td>
-                                        <td data-label="Name">John Doe</td>
-                                        <td data-label="Course">Computer Science</td>
-                                        <td data-label="Enroll Date">2023-10-05</td>
-                                        <td data-label="Duration">6 Months</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="ID">#STU002</td>
-                                        <td data-label="Name">Jane Smith</td>
-                                        <td data-label="Course">Mathematics</td>
-                                        <td data-label="Enroll Date">2023-10-02</td>
-                                        <td data-label="Duration">5 Months</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="ID">#STU003</td>
-                                        <td data-label="Name">Mike Johnson</td>
-                                        <td data-label="Course">Physics</td>
-                                        <td data-label="Enroll Date">2023-10-04</td>
-                                        <td data-label="Duration">6 Months</td>
-                                    </tr>
+                                <tr th:each="student : ${students}">
+                                    <td data-label="ID" th:text="${student.studentId}"></td>
+                                    <td data-label="Name" th:text="${student.studentName}"></td>
+                                    <td data-label="Email" th:text="${student.email}"></td>
+                                    <td data-label="Courses Count" th:text="${student.courseCount}"></td>
+                                    <td data-label="Total Fee" th:text="${student.totalFee}"></td>
+                                    <td data-label="Actions">
+                                        <a th:href="@{/enrollments/studentEnrollmentGetDetails/{id}(id=${student.studentId} ,source='dashboard')}" class="btn btn-sm btn-info text-white" title="View"><i class="bi bi-eye"></i></a>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

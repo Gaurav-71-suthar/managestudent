@@ -124,4 +124,28 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 })
         .orElseThrow(() -> new RuntimeException("Student not found"));
     }
+
+    @Override
+    public List<EnrollmentSummary> getRecentlyEnrolledStudents() {
+        log.info("list of recently enrolled students");
+
+        PageRequest pageRequest=PageRequest.of(0, 5,Sort.by(Sort.Direction.DESC,"id"));
+        return studentRepository.findEnrolledStudents(pageRequest)
+                .map(students -> {
+                    EnrollmentSummary dto=new EnrollmentSummary();
+                    dto.setStudentId(students.getId());
+                    dto.setStudentName(students.getFirstName() + " " + students.getLastName());
+                    dto.setEmail(students.getEmail());
+
+                    dto.setCourseCount(students.getEnrollments().size());
+                    BigDecimal totalFee= students.getEnrollments().stream()
+                            .map(enrollment -> enrollment.getCourse().getFee())
+                            .filter(fee -> fee!=null)
+                            .reduce(BigDecimal.ZERO,BigDecimal::add);
+                    dto.setTotalFee(totalFee);
+                    return dto;
+                })
+                .getContent();
+
+    }
 }

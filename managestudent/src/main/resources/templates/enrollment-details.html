@@ -19,7 +19,9 @@
                         <h2 class="mb-1">Enrollment Details</h2>
                         <p class="mb-0 opacity-75">Overview of courses, fees, and student information.</p>
                     </div>
-                    <a th:href="@{/enrollments/enrollmentList}" class="btn btn-light text-primary fw-semibold"><i class="bi bi-arrow-left me-1"></i> Back to Enrolled Students</a>
+                    <a th:href="${source=='dashboard'} ? @{/dashboard} :@{/enrollments/enrollmentList}"
+                       class="btn btn-light text-primary fw-semibold" th:text="${source=='dashboard'} ? 'Back to dashboard' : 'Back to Enrolled Students' ">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Enrolled Students</a>
                 </div>
             </div>
 
