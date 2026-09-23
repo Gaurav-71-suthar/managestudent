@@ -5,12 +5,16 @@ import com.cwg.managestudent.repository.CourseRepository;
 import com.cwg.managestudent.repository.EnrollmentRepository;
 import com.cwg.managestudent.repository.StudentRepository;
 import com.cwg.managestudent.service.DashboardService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class DashboardServiceImpl implements DashboardService {
 
     private final EnrollmentRepository enrollmentRepository;
@@ -33,13 +37,18 @@ public class DashboardServiceImpl implements DashboardService {
         String topPerformingCourse=getTopPerformingCourse();
 
         YearMonth currentMonth=YearMonth.now();
-        LocalDate startDate=currentMonth.atDay(1);
-        LocalDate endDate=currentMonth.atEndOfMonth();
+        LocalDateTime startDate=currentMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDate=currentMonth.atEndOfMonth().atTime(LocalTime.MAX);
 
         long studentEnrolledThisMonth=enrollmentRepository.countDistinctStudentByEnrollDateBetween(startDate, endDate);
 
+        DashboardStatsDTO dashboardStatsDTO=new DashboardStatsDTO();
+        dashboardStatsDTO.setTotalStudents(totalStudents);
+        dashboardStatsDTO.setTotalCourses(totalCourse);
+        dashboardStatsDTO.setTopPerformingCourse(topPerformingCourse);
+        dashboardStatsDTO.setStudentsEnrolledThisMonth(studentEnrolledThisMonth);
 
-        return null;
+        return dashboardStatsDTO;
     }
     private String getTopPerformingCourse(){
         return enrollmentRepository.findAll()

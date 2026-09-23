@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment,Long> {
@@ -19,7 +20,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment,Long> {
             where e.enrolledDate between :startDate and :endDate            
 
             """)
-     long countDistinctStudentByEnrollDateBetween(@Param("startDate") LocalDate startDate,
-                                                  @Param("endDate") LocalDate endDate);
+     long countDistinctStudentByEnrollDateBetween(@Param("startDate") LocalDateTime startDate,
+                                                  @Param("endDate") LocalDateTime endDate);
 
 }
